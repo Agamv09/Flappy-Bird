@@ -18,3 +18,18 @@ func reset():
 	set_rotation(0)
 	
 #Called every frame, Delta is time passed since last frame
+func _physics_process(delta):
+	if flying or falling:
+		velocity.y += GRAVITY * delta
+		#terminal velocity
+		if velocity.y > MAX_VELOCITY:
+			velocity.y = MAX_VELOCITY
+		if flying:
+			set_rotation(deg_to_rad(velocity.y * 0.05))
+			AnimatedSprite2D.play()
+		elif falling:
+			set_rotation(PI/2)
+			AnimatedSprite2D.stop()
+		move_and_collide(velocity * delta)
+		else:
+			AnimatedSprite2D.stop()
